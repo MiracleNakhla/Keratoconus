@@ -7,11 +7,12 @@ from PIL import Image
 @st.cache_resource
 def load_model():
     try:
-        # Load your fine-tuned model (use the correct path to your model)
+        # Use the correct path to your model
         model = tf.keras.models.load_model(r"C:\Users\Gehan Massoud\keratoconus_model_finetuned300.keras")
         return model
     except Exception as e:
-        return f"Error loading model: {str(e)}"
+        st.error(f"Error loading model: {str(e)}")
+        return None
 
 model = load_model()
 
@@ -37,17 +38,17 @@ def preprocess_image(image):
 
 # Make Predictions
 def predict_keratoconus(image):
+    if model is None:
+        return "Model not loaded."
     try:
-        # Preprocess the image before feeding it into the model
+        # Preprocess the image
         img_array = preprocess_image(image)
-        # If there was an error in preprocessing, return the error message
-        if isinstance(img_array, str):  
+        # If an error occurred during preprocessing, img_array will be a string
+        if isinstance(img_array, str):
             return img_array
-        # Make prediction using the model
+        # Get predictions
         predictions = model.predict(img_array)
-        # Get the class with the highest probability
         predicted_class = np.argmax(predictions, axis=1)[0]
-        # Return the predicted class (either 'Normal' or 'Keratoconus')
         return class_names[predicted_class]
     except Exception as e:
         return f"Error in prediction: {str(e)}"
@@ -59,9 +60,9 @@ st.write("Upload an eye scan image and let the AI analyze it.")
 uploaded_file = st.file_uploader("Upload an eye scan", type=["jpg", "png", "jpeg"])
 
 if uploaded_file is not None:
-    image = Image.open(uploaded_file)  # Open image using PIL
+    image = Image.open(uploaded_file)
     st.image(image, caption="Uploaded Image", use_container_width=True)
-
+    
     if st.button("Analyze Image"):
-        predicted_class = predict_keratoconus(image)
-        st.success(f"Prediction: {predicted_class}")
+        prediction = predict_keratoconus(image)
+        st.success(f"Prediction: {prediction}")
