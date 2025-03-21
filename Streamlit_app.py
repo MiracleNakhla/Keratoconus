@@ -1,10 +1,10 @@
 import streamlit as st
 import tensorflow as tf
 import numpy as np
-import cv2
 from PIL import Image
 
 # Load the trained model
+@st.cache_resource  # Cache the model to speed up loading
 def load_model():
     try:
         # Load your fine-tuned model (use the correct path to your model)
@@ -23,14 +23,12 @@ def preprocess_image(image):
     try:
         # Convert PIL image to NumPy array
         image = np.array(image)
-        # Convert the image from RGB to BGR (since OpenCV uses BGR)
-        image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         
-        # Resize the image to 224x224 pixels (the expected input size for MobileNetV2)
-        image = cv2.resize(image, (224, 224))
+        # Resize the image to 224x224 pixels (the expected input size for MobileNetV2) using PIL
+        image = image.resize((224, 224))
         
         # Normalize pixel values (scale between 0 and 1)
-        image = image / 255.0
+        image = np.array(image) / 255.0
         # Add batch dimension (the model expects a batch of images)
         image = np.expand_dims(image, axis=0)
         return image
@@ -57,19 +55,16 @@ def predict_keratoconus(image):
     except Exception as e:
         return f"Error in prediction: {str(e)}"
 
-# Streamlit UI
+# Build Streamlit UI
 st.title("Miracle Keratoconus Detection AI")
 st.write("Upload an eye scan image and let the AI analyze it.")
 
-# File uploader for image input
-uploaded_file = st.file_uploader("Choose an eye scan image...", type=["jpg", "png", "jpeg"])
+uploaded_file = st.file_uploader("Upload an eye scan", type=["jpg", "png", "jpeg"])
 
 if uploaded_file is not None:
-    # Open the uploaded image using PIL
-    image = Image.open(uploaded_file)
+    image = Image.open(uploaded_file)  # Open image using PIL
     st.image(image, caption="Uploaded Image", use_column_width=True)
 
-    # When the button is clicked, run the prediction
     if st.button("Analyze Image"):
         predicted_class = predict_keratoconus(image)
         st.success(f"**Prediction:** {predicted_class}")
