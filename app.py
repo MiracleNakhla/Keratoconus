@@ -33,7 +33,7 @@ def predict_keratoconus(image):
     return class_names[predicted_class]  # Return only the predicted class
 
 # STEP 6: Build Streamlit UI
-st.title("🔍 Keratoconus Detection AI")
+st.title("🔍 Miracle Keratoconus Detection AI")
 st.write("Upload an eye scan image and let the AI analyze it.")
 
 uploaded_file = st.file_uploader("📂 Upload an eye scan", type=["jpg", "png", "jpeg"])
