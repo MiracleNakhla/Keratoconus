@@ -3,12 +3,11 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 
-# Load the trained model
+# Load the trained model using a relative path
 @st.cache_resource
 def load_model():
     try:
-        # Use the correct path to your model
-        model = tf.keras.models.load_model(r"C:\Users\Gehan Massoud\keratoconus_model_finetuned300.keras")
+        model = tf.keras.models.load_model("keratoconus_model_finetuned300.keras")
         return model
     except Exception as e:
         st.error(f"Error loading model: {str(e)}")
@@ -41,7 +40,6 @@ def predict_keratoconus(image):
     if model is None:
         return "Model not loaded."
     try:
-        # Preprocess the image
         img_array = preprocess_image(image)
         # If an error occurred during preprocessing, img_array will be a string
         if isinstance(img_array, str):
