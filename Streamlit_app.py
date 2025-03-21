@@ -4,7 +4,7 @@ import numpy as np
 from PIL import Image
 
 # Load the trained model
-@st.cache_resource  # Cache the model to speed up loading
+@st.cache_resource
 def load_model():
     try:
         # Load your fine-tuned model (use the correct path to your model)
@@ -21,16 +21,25 @@ class_names = ["Normal", "Keratoconus"]
 # Preprocess the uploaded image
 def preprocess_image(image):
     try:
+        # Check if image is None
+        if image is None:
+            return "Error: No image provided"
+        
         # Convert PIL image to NumPy array
         image = np.array(image)
         
-        # Resize the image to 224x224 pixels (the expected input size for MobileNetV2) using PIL
-        image = image.resize((224, 224))
+        # Resize the image to 224x224 pixels (the expected input size for MobileNetV2)
+        image = image.resize((224, 224))  # PIL way to resize
+        
+        # Convert the image from RGB to BGR (this is no longer needed if you use PIL for resizing)
+        image = np.array(image)
         
         # Normalize pixel values (scale between 0 and 1)
-        image = np.array(image) / 255.0
+        image = image / 255.0
+        
         # Add batch dimension (the model expects a batch of images)
         image = np.expand_dims(image, axis=0)
+        
         return image
     except Exception as e:
         return f"Error in preprocessing image: {str(e)}"
@@ -47,6 +56,7 @@ def predict_keratoconus(image):
         
         # Make prediction using the model
         predictions = model.predict(img_array)
+        
         # Get the class with the highest probability
         predicted_class = np.argmax(predictions, axis=1)[0]
         
@@ -67,4 +77,4 @@ if uploaded_file is not None:
 
     if st.button("Analyze Image"):
         predicted_class = predict_keratoconus(image)
-        st.success(f"**Prediction:** {predicted_class}")
+        st.success(f"Prediction: {predicted_class}")
