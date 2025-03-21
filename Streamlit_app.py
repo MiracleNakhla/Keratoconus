@@ -73,7 +73,7 @@ uploaded_file = st.file_uploader("Upload an eye scan", type=["jpg", "png", "jpeg
 
 if uploaded_file is not None:
     image = Image.open(uploaded_file)  # Open image using PIL
-    st.image(image, caption="Uploaded Image", use_column_width=True)
+    st.image(image, caption="Uploaded Image", use_container_width=True)  # Updated parameter
 
     if st.button("Analyze Image"):
         predicted_class = predict_keratoconus(image)
