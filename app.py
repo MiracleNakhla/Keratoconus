@@ -3,7 +3,7 @@ import streamlit as st
 
 import tensorflow as tf
 import numpy as np
-#import cv2
+import cv2
 from PIL import Image
 
 # STEP 3: Load the trained model
@@ -20,7 +20,7 @@ class_names = ["Normal", "Keratoconus"]
 # STEP 4: Preprocess the uploaded image
 def preprocess_image(image):
     image = np.array(image)  # Convert PIL image to NumPy array
-   # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)  # Convert to BGR format
+   image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)  # Convert to BGR format
     image = image / 255.0  # Normalize pixel values
     image = np.expand_dims(image, axis=0)  # Add batch dimension
     return image
