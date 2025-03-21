@@ -3,3 +3,4 @@ tensorflow==2.18
 numpy
 opencv-python==4.5.5.62
 pillow
+opencv-python-headless
