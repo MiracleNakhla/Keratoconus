@@ -33,15 +33,15 @@ def predict_keratoconus(image):
     return class_names[predicted_class]  # Return only the predicted class
 
 # STEP 6: Build Streamlit UI
-st.title("🔍 Miracle Keratoconus Detection AI")
+st.title("Miracle Keratoconus Detection AI")
 st.write("Upload an eye scan image and let the AI analyze it.")
 
-uploaded_file = st.file_uploader("📂 Upload an eye scan", type=["jpg", "png", "jpeg"])
+uploaded_file = st.file_uploader("Upload an eye scan", type=["jpg", "png", "jpeg"])
 
 if uploaded_file is not None:
     image = Image.open(uploaded_file)  # Open image using PIL
-    st.image(image, caption="🖼 Uploaded Image", use_column_width=True)
+    st.image(image, caption="Uploaded Image", use_column_width=True)
 
-    if st.button("🔍 Analyze Image"):
+    if st.button("Analyze Image"):
         predicted_class = predict_keratoconus(image)
         st.success(f"**Prediction:** {predicted_class}")
