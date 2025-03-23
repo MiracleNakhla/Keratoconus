@@ -2,17 +2,28 @@ import streamlit as st
 import tensorflow as tf
 import numpy as np
 from PIL import Image
+import os
+import gdown
 
-# Load the trained model using a relative path
+# Google Drive file ID (replace with your actual file ID)
+FILE_ID = "1uYQPdXcyC0zv2LwQ3wYZ59dEfMx11ejN"
+MODEL_PATH = "keratoconus_model_finetuned300.keras"
+
+# Download model from Google Drive if not available locally
 @st.cache_resource
 def load_model():
+    if not os.path.exists(MODEL_PATH):
+        st.write("Downloading model from Google Drive...")
+        gdown.download(f"https://drive.google.com/uc?id={FILE_ID}", MODEL_PATH, quiet=False)
+    
     try:
-        model = tf.keras.models.load_model(r"C:\Users\snakhla\Downloads\keratoconus_model_finetuned300.keras")
+        model = tf.keras.models.load_model(MODEL_PATH)
         return model
     except Exception as e:
         st.error(f"Error loading model: {str(e)}")
         return None
 
+# Load the model
 model = load_model()
 
 # Define class labels
