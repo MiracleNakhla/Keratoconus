@@ -7,7 +7,7 @@ from PIL import Image
 @st.cache_resource
 def load_model():
     try:
-        model = tf.keras.models.load_model("C:\Users\snakhla\Downloads\keratoconus_model_finetuned300.keras")
+        model = tf.keras.models.load_model(r"C:\Users\snakhla\Downloads\keratoconus_model_finetuned300.keras")
         return model
     except Exception as e:
         st.error(f"Error loading model: {str(e)}")
