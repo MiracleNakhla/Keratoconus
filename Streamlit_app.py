@@ -52,8 +52,8 @@ def predict_keratoconus(image):
         return f"Error in prediction: {str(e)}"
 
 # Build Streamlit UI
-st.title("Miracle Keratoconus Detection AI")
-st.write("Upload an eye scan image and let the AI analyze it.")
+st.title("KlearVue")
+st.write("Upload an eye scan image and let KlearVue analyze it.")
 
 uploaded_file = st.file_uploader("Upload an eye scan", type=["jpg", "png", "jpeg"])
 
